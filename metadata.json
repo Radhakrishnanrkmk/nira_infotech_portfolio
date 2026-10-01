@@ -1,0 +1,6 @@
+{
+  "name": "NIRA Infotech — Web Development & IT Solutions",
+  "description": "Modern full-stack portfolio website and comprehensive admin management system for NIRA Infotech, powered by React, Express, and Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
