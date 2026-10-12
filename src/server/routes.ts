@@ -388,9 +388,9 @@ apiRouter.post('/admin/supabase/connect', requireAdmin, async (req: Request, res
   }
 });
 
-apiRouter.post('/admin/supabase/disconnect', requireAdmin, (_req: Request, res: Response) => {
+apiRouter.post('/admin/supabase/disconnect', requireAdmin, async (_req: Request, res: Response) => {
   try {
-    const result = disconnectSupabase();
+    const result = await disconnectSupabase();
     res.json(result);
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });

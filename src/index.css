@@ -11,21 +11,99 @@
   }
 }
 
-/* Custom modern scrollbar */
+/* Glassmorphism utility layer */
+@layer utilities {
+  .glass-panel {
+    background: linear-gradient(135deg, rgba(8, 23, 61, 0.65) 0%, rgba(4, 13, 36, 0.75) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(55, 129, 252, 0.28);
+    box-shadow: 0 8px 32px 0 rgba(3, 25, 91, 0.4), inset 0 1px 1px 0 rgba(203, 233, 253, 0.3);
+  }
+
+  .glass-panel-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-panel-hover:hover {
+    border-color: rgba(55, 129, 252, 0.6);
+    box-shadow: 0 12px 40px 0 rgba(25, 81, 252, 0.35), inset 0 1px 2px 0 rgba(203, 233, 253, 0.5);
+    transform: translateY(-2px);
+  }
+
+  .glass-card {
+    background: linear-gradient(135deg, rgba(7, 22, 60, 0.6) 0%, rgba(3, 11, 31, 0.7) 100%);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(55, 129, 252, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(3, 25, 91, 0.35), inset 0 1px 1px 0 rgba(203, 233, 253, 0.25);
+  }
+
+  .glass-card-hover {
+    transition: all 0.25s ease;
+  }
+
+  .glass-card-hover:hover {
+    border-color: rgba(55, 129, 252, 0.55);
+    box-shadow: 0 12px 36px 0 rgba(25, 81, 252, 0.3), inset 0 1px 2px 0 rgba(203, 233, 253, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .glass-pill {
+    background: linear-gradient(180deg, rgba(203, 233, 253, 0.15) 0%, rgba(25, 81, 252, 0.12) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(55, 129, 252, 0.35);
+    box-shadow: inset 0 1px 1px 0 rgba(203, 233, 253, 0.3);
+  }
+
+  .glass-input {
+    background: rgba(3, 9, 30, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(55, 129, 252, 0.3);
+    color: #ffffff;
+    transition: all 0.2s ease;
+  }
+
+  .glass-input:focus {
+    outline: none;
+    border-color: #3781fc;
+    box-shadow: 0 0 15px rgba(55, 129, 252, 0.45), inset 0 1px 1px rgba(203, 233, 253, 0.2);
+  }
+
+  .glass-glow-button {
+    background: linear-gradient(135deg, #1951fc 0%, #3781fc 100%);
+    border: 1px solid rgba(203, 233, 253, 0.4);
+    box-shadow: 0 0 25px rgba(25, 81, 252, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.25s ease;
+  }
+
+  .glass-glow-button:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+    box-shadow: 0 0 32px rgba(55, 129, 252, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    transform: translateY(-1px);
+  }
+}
+
+/* Custom electric blue glass scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: #020614;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+  background: #0b2cb1;
+  border-radius: 9999px;
+  border: 1px solid rgba(55, 129, 252, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #1951fc;
 }

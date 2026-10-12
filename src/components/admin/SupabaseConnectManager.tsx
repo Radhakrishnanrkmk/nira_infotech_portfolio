@@ -224,17 +224,17 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
       </div>
 
       {/* Live Connection Status Card */}
-      <div className={`p-6 rounded-2xl border transition-all ${
+      <div className={`p-6 rounded-3xl border transition-all backdrop-blur-xl ${
         status?.isConnected
-          ? 'bg-emerald-950/20 border-emerald-800/80 shadow-lg shadow-emerald-950/20'
-          : 'bg-slate-900/60 border-slate-800'
+          ? 'bg-gradient-to-br from-emerald-950/40 via-[#071d2b]/60 to-[#04121d]/70 border-emerald-500/40 shadow-[0_8px_32px_rgba(16,185,129,0.25)]'
+          : 'bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border-[#3781fc]/25 shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)]'
       }`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border shrink-0 ${
               status?.isConnected
-                ? 'bg-emerald-900/40 border-emerald-700/60 text-emerald-400'
-                : 'bg-slate-800/80 border-slate-700 text-slate-400'
+                ? 'bg-emerald-900/40 border-emerald-500/50 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                : 'bg-[#08173d]/60 border-[#3781fc]/35 text-[#cbe9fd] shadow-[0_0_15px_rgba(25,81,252,0.25)]'
             }`}>
               <Database className="w-6 h-6" />
             </div>
@@ -244,19 +244,19 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
                 <span className={`w-2.5 h-2.5 rounded-full ${
                   status?.isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
                 }`} />
-                <h3 className="text-base font-bold text-slate-100">
+                <h3 className="text-base font-bold text-white">
                   {status?.isConnected ? 'Connected to Supabase Cloud' : 'Using Local JSON Database'}
                 </h3>
                 <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full border ${
                   status?.isConnected
-                    ? 'bg-emerald-950 border-emerald-800 text-emerald-300'
-                    : 'bg-amber-950 border-amber-800 text-amber-300'
+                    ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-300 font-bold'
+                    : 'bg-amber-500/20 border-amber-400/40 text-amber-300'
                 }`}>
                   {status?.isConnected ? `Active (${status.source})` : 'Fallback Mode'}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-400 mt-1 font-mono truncate max-w-md">
+              <p className="text-xs text-slate-300 mt-1 font-mono truncate max-w-md">
                 {status?.isConnected
                   ? `Target: ${status.url}`
                   : 'Data is safely stored in local database files (/data/db.json).'}
@@ -349,11 +349,11 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
       )}
 
       {/* Connection Form */}
-      <form onSubmit={handleConnect} className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-5">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2 text-cyan-400">
+      <form onSubmit={handleConnect} className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-5">
+        <div className="flex items-center justify-between pb-3 border-b border-[#3781fc]/20">
+          <div className="flex items-center gap-2 text-[#3781fc]">
             <Key className="w-4 h-4" />
-            <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
               Paste Supabase Credentials
             </h3>
           </div>
@@ -361,7 +361,7 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
             href="https://supabase.com/dashboard"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs text-cyan-400 hover:underline"
+            className="flex items-center gap-1 text-xs text-[#cbe9fd] hover:text-white transition-colors"
           >
             <span>Open Supabase Dashboard</span>
             <ExternalLink className="w-3 h-3" />
@@ -370,9 +370,9 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
 
         {/* 1. Project URL */}
         <div>
-          <label className="block text-xs font-mono text-slate-300 mb-1.5 flex items-center justify-between">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5 flex items-center justify-between">
             <span>1. Supabase Project URL *</span>
-            <span className="text-slate-500 text-[11px]">Settings ➔ API ➔ Project URL</span>
+            <span className="text-slate-400 text-[11px]">Settings ➔ API ➔ Project URL</span>
           </label>
           <div className="relative">
             <input
@@ -381,17 +381,17 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
               placeholder="https://xyzabcdefghijklm.supabase.co"
               value={projectUrl}
               onChange={(e) => setProjectUrl(e.target.value)}
-              className="w-full px-4 py-2.5 pl-10 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm font-mono focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 pl-10 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm font-mono focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
-            <Globe className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Globe className="w-4 h-4 text-[#3781fc] absolute left-3.5 top-1/2 -translate-y-1/2" />
           </div>
         </div>
 
         {/* 2. Anon / Public Key */}
         <div>
-          <label className="block text-xs font-mono text-slate-300 mb-1.5 flex items-center justify-between">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5 flex items-center justify-between">
             <span>2. Supabase Anon / Public Key *</span>
-            <span className="text-slate-500 text-[11px]">Settings ➔ API ➔ anon / public</span>
+            <span className="text-slate-400 text-[11px]">Settings ➔ API ➔ anon / public</span>
           </label>
           <div className="relative">
             <input
@@ -400,9 +400,9 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
               placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               value={anonKey}
               onChange={(e) => setAnonKey(e.target.value)}
-              className="w-full px-4 py-2.5 pl-10 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-xs font-mono focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 pl-10 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-xs font-mono focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
-            <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Key className="w-4 h-4 text-[#3781fc] absolute left-3.5 top-1/2 -translate-y-1/2" />
           </div>
         </div>
 
@@ -410,7 +410,7 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
         <div>
           <label className="block text-xs font-mono text-emerald-400 mb-1.5 flex items-center justify-between">
             <span>3. Supabase Service Role Key (Secret, Recommended for Full Admin Sync)</span>
-            <span className="text-slate-500 text-[11px]">Settings ➔ API ➔ service_role (secret)</span>
+            <span className="text-slate-400 text-[11px]">Settings ➔ API ➔ service_role (secret)</span>
           </label>
           <div className="relative">
             <input
@@ -418,13 +418,13 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
               placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (Optional, allows full admin operations)"
               value={serviceRoleKey}
               onChange={(e) => setServiceRoleKey(e.target.value)}
-              className="w-full px-4 py-2.5 pl-10 pr-10 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-xs font-mono focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 pl-10 pr-10 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-xs font-mono focus:outline-none focus:border-emerald-500"
             />
             <Shield className="w-4 h-4 text-emerald-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <button
               type="button"
               onClick={() => setShowSecretKey(!showSecretKey)}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
             >
               {showSecretKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
@@ -435,12 +435,12 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
         </div>
 
         {/* Form Action Buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#3781fc]/20">
           <button
             type="button"
             onClick={handleTest}
             disabled={testing || connecting}
-            className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-200 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 rounded-xl border border-slate-700 transition-colors cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-slate-200 bg-[#08173d]/60 hover:bg-[#0f2862] disabled:opacity-50 rounded-xl border border-[#3781fc]/30 transition-colors cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${testing ? 'animate-spin' : ''}`} />
             <span>{testing ? 'Testing Connection...' : 'Test Connection'}</span>
@@ -449,7 +449,7 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
           <button
             type="submit"
             disabled={connecting || testing}
-            className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 rounded-xl shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:opacity-50 rounded-xl border border-emerald-400/40 shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
             <Link2 className={`w-3.5 h-3.5 ${connecting ? 'animate-spin' : ''}`} />
             <span>{connecting ? 'Saving & Connecting...' : 'Connect Supabase Live'}</span>
@@ -458,17 +458,17 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
       </form>
 
       {/* SQL Migration Script & Setup Steps */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-[#0a1526] to-slate-900 border border-cyan-900/50 space-y-4">
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <Database className="w-5 h-5 text-cyan-400" />
-            <h3 className="text-sm font-bold text-slate-100 font-mono">1-Click SQL Schema Exporter</h3>
+            <Database className="w-5 h-5 text-[#3781fc]" />
+            <h3 className="text-sm font-bold text-white font-mono">1-Click SQL Schema Exporter</h3>
           </div>
 
           <button
             type="button"
             onClick={handleCopySchema}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-950 border border-cyan-700/60 text-cyan-300 hover:text-white text-xs font-mono transition-colors cursor-pointer self-start sm:self-auto"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#0b2cb1]/40 hover:bg-[#1951fc]/40 border border-[#3781fc]/35 text-[#cbe9fd] hover:text-white text-xs font-mono transition-colors cursor-pointer self-start sm:self-auto"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>{copiedSchema ? 'SQL Script Copied!' : 'Copy SQL Schema Script'}</span>
@@ -479,7 +479,7 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
           Before connecting, make sure your Supabase project has the required tables created. Follow these 3 quick steps:
         </p>
 
-        <ol className="list-decimal list-inside space-y-2 text-xs text-slate-300 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+        <ol className="list-decimal list-inside space-y-2 text-xs text-slate-300 bg-[#03091e]/80 p-4 rounded-xl border border-[#3781fc]/20">
           <li>
             Open your <strong>Supabase Dashboard</strong> and click on the <strong>SQL Editor</strong> tab on the left.
           </li>
@@ -493,13 +493,13 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
       </div>
 
       {/* Vercel Deployment Process & Config */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-[#101426] to-slate-900 border border-indigo-900/50 space-y-5">
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <Rocket className="w-5 h-5 text-indigo-400" />
+            <Rocket className="w-5 h-5 text-[#3781fc]" />
             <div>
-              <h3 className="text-sm font-bold text-slate-100 font-mono">Deploy in Vercel — Process & Configuration</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Zero-config serverless deployment ready with pre-configured <code className="text-indigo-300">vercel.json</code></p>
+              <h3 className="text-sm font-bold text-white font-mono">Deploy in Vercel — Process & Configuration</h3>
+              <p className="text-xs text-slate-300 mt-0.5">Zero-config serverless deployment ready with pre-configured <code className="text-[#cbe9fd]">vercel.json</code></p>
             </div>
           </div>
 
@@ -507,48 +507,48 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
             href="https://vercel.com/new"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-indigo-950 border border-indigo-700/60 text-indigo-300 hover:text-white text-xs font-mono transition-colors cursor-pointer self-start sm:self-auto"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#0b2cb1]/40 hover:bg-[#1951fc]/40 border border-[#3781fc]/35 text-[#cbe9fd] hover:text-white text-xs font-mono transition-colors cursor-pointer self-start sm:self-auto"
           >
             <span>Open Vercel New Project</span>
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3 h-3" />
           </a>
         </div>
 
         {/* 4 Step Process */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-bold text-indigo-300">
-              <span className="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-700 flex items-center justify-center text-[10px]">1</span>
+          <div className="p-4 rounded-2xl bg-[#03091e]/80 border border-[#3781fc]/25 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#cbe9fd]">
+              <span className="w-5 h-5 rounded-full bg-[#1951fc]/30 border border-[#3781fc]/50 flex items-center justify-center text-[10px] text-white">1</span>
               <span>Push Code to GitHub</span>
             </div>
-            <p className="text-xs text-slate-400">
-              Push your project repository to GitHub or GitLab. All build and serverless files (<code className="text-slate-300">vercel.json</code> &amp; <code className="text-slate-300">api/index.ts</code>) are already generated.
+            <p className="text-xs text-slate-300">
+              Push your project repository to GitHub or GitLab. All build and serverless files (<code className="text-slate-200">vercel.json</code> &amp; <code className="text-slate-200">api/index.ts</code>) are already generated.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-bold text-indigo-300">
-              <span className="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-700 flex items-center justify-center text-[10px]">2</span>
+          <div className="p-4 rounded-2xl bg-[#03091e]/80 border border-[#3781fc]/25 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#cbe9fd]">
+              <span className="w-5 h-5 rounded-full bg-[#1951fc]/30 border border-[#3781fc]/50 flex items-center justify-center text-[10px] text-white">2</span>
               <span>Import in Vercel</span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-300">
               Go to <strong>vercel.com/new</strong>, select your repository, choose <strong>Vite</strong> as the framework preset, and verify:
             </p>
-            <div className="text-[11px] font-mono text-slate-300 space-y-0.5 bg-slate-900/80 p-2 rounded-lg">
+            <div className="text-[11px] font-mono text-slate-300 space-y-0.5 bg-[#020614]/80 p-2 rounded-lg border border-[#3781fc]/20">
               <div>Build Command: <span className="text-emerald-400">npm run build</span></div>
               <div>Output Directory: <span className="text-emerald-400">dist</span></div>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-bold text-indigo-300">
-              <span className="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-700 flex items-center justify-center text-[10px]">3</span>
+          <div className="p-4 rounded-2xl bg-[#03091e]/80 border border-[#3781fc]/25 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#cbe9fd]">
+              <span className="w-5 h-5 rounded-full bg-[#1951fc]/30 border border-[#3781fc]/50 flex items-center justify-center text-[10px] text-white">3</span>
               <span>Add Environment Variables in Vercel</span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-300">
               In Vercel project settings under <strong>Environment Variables</strong>, add your Supabase credentials:
             </p>
-            <div className="text-[11px] font-mono text-cyan-300 space-y-0.5 bg-slate-900/80 p-2 rounded-lg">
+            <div className="text-[11px] font-mono text-[#cbe9fd] space-y-0.5 bg-[#020614]/80 p-2 rounded-lg border border-[#3781fc]/20">
               <div>SUPABASE_URL</div>
               <div>SUPABASE_ANON_KEY</div>
               <div>SUPABASE_SERVICE_ROLE_KEY</div>
@@ -556,13 +556,13 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
-            <div className="flex items-center gap-2 text-xs font-bold text-indigo-300">
-              <span className="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-700 flex items-center justify-center text-[10px]">4</span>
+          <div className="p-4 rounded-2xl bg-[#03091e]/80 border border-[#3781fc]/25 space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#cbe9fd]">
+              <span className="w-5 h-5 rounded-full bg-[#1951fc]/30 border border-[#3781fc]/50 flex items-center justify-center text-[10px] text-white">4</span>
               <span>Deploy &amp; Launch</span>
             </div>
-            <p className="text-xs text-slate-400">
-              Click <strong>Deploy</strong>. Vercel builds the SPA frontend in <code className="text-slate-300">dist</code> and automatically turns <code className="text-slate-300">api/index.ts</code> into a global Serverless Function handling all CRUD routes.
+            <p className="text-xs text-slate-300">
+              Click <strong>Deploy</strong>. Vercel builds the SPA frontend in <code className="text-slate-200">dist</code> and automatically turns <code className="text-slate-200">api/index.ts</code> into a global Serverless Function handling all CRUD routes.
             </p>
           </div>
         </div>
@@ -577,7 +577,7 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
               setCopiedVercelJson(true);
               setTimeout(() => setCopiedVercelJson(false), 3000);
             }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono text-slate-200 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#08173d]/60 hover:bg-[#0f2862] border border-[#3781fc]/30 text-xs font-mono text-slate-200 transition-colors cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>{copiedVercelJson ? 'vercel.json Copied!' : 'Copy vercel.json'}</span>
@@ -591,7 +591,7 @@ export const SupabaseConnectManager: React.FC<SupabaseConnectManagerProps> = ({ 
               setCopiedVercelEnv(true);
               setTimeout(() => setCopiedVercelEnv(false), 3000);
             }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-950/80 hover:bg-indigo-900/80 border border-indigo-700/80 text-xs font-mono text-indigo-200 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0b2cb1]/50 hover:bg-[#1951fc]/50 border border-[#3781fc]/40 text-xs font-mono text-[#cbe9fd] transition-colors cursor-pointer"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>{copiedVercelEnv ? 'Vercel Env Vars Copied!' : 'Copy Vercel .env Template'}</span>

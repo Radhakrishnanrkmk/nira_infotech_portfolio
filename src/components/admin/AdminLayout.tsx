@@ -21,7 +21,6 @@ import {
   ExternalLink,
   Menu,
   X,
-  PlusCircle,
   Database
 } from 'lucide-react';
 
@@ -82,37 +81,37 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[#020614] text-slate-100 flex flex-col md:flex-row relative selection:bg-[#1951fc] selection:text-white">
       {/* Mobile Top Bar */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-[#0b0f19] border-b border-slate-800 sticky top-0 z-40">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 bg-[#03091e]/85 backdrop-blur-2xl border-b border-[#3781fc]/25 sticky top-0 z-40">
         <NiraLogo size="sm" customLogoUrl={settings.logo_url} />
         <div className="flex items-center gap-2">
           <button
             onClick={onViewPublicSite}
-            className="p-2 text-slate-400 hover:text-white rounded-lg bg-slate-800"
+            className="p-1.5 text-slate-300 hover:text-white rounded-xl bg-[#08173d]/60 border border-[#3781fc]/30"
             title="View Public Website"
           >
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className="w-4 h-4 text-[#cbe9fd]" />
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-400 hover:text-white rounded-lg bg-slate-800"
+            className="p-1.5 text-slate-300 hover:text-white rounded-xl bg-[#08173d]/60 border border-[#3781fc]/30"
             aria-label="Toggle Menu"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 text-[#cbe9fd]" /> : <Menu className="w-5 h-5 text-[#cbe9fd]" />}
           </button>
         </div>
       </div>
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed md:sticky top-0 h-screen w-64 bg-[#0b0f19] border-r border-slate-800/90 flex flex-col justify-between p-5 z-50 transition-transform duration-300 ${
+        className={`fixed md:sticky top-0 h-screen w-64 bg-[#040c24]/85 backdrop-blur-2xl border-r border-[#3781fc]/25 flex flex-col justify-between p-4 z-50 transition-transform duration-300 shadow-[0_8px_32px_0_rgba(3,25,91,0.4)] ${
           mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
         <div>
           {/* Logo in Sidebar */}
-          <div className="pb-6 border-b border-slate-800/80 mb-6 flex items-center justify-between">
+          <div className="pb-4 border-b border-[#3781fc]/20 mb-4 flex items-center justify-between">
             <NiraLogo size="md" customLogoUrl={settings.logo_url} />
             <button
               onClick={() => setMobileMenuOpen(false)}
@@ -123,33 +122,31 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-1">
+          <nav className="space-y-1.5">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNavigate(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   activeTab === item.id
-                    ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-950/50'
-                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-850/60'
+                    ? 'bg-gradient-to-r from-[#1951fc] to-[#3781fc] text-white border border-[#cbe9fd]/35 shadow-[0_0_20px_rgba(25,81,252,0.45)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]'
+                    : 'text-slate-300 hover:text-white hover:bg-[#1951fc]/15 border border-transparent hover:border-[#3781fc]/30'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
-                  {item.icon}
+                  <span className={activeTab === item.id ? 'text-white' : 'text-[#cbe9fd]'}>{item.icon}</span>
                   <span>{item.label}</span>
                 </div>
 
                 {item.badge !== undefined && (
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-                    activeTab === item.id ? 'bg-slate-950 text-emerald-400' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                  }`}>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-bold">
                     {item.badge}
                   </span>
                 )}
 
                 {item.count !== undefined && item.badge === undefined && (
                   <span className={`text-[10px] font-mono ${
-                    activeTab === item.id ? 'text-slate-900' : 'text-slate-500'
+                    activeTab === item.id ? 'text-[#cbe9fd]' : 'text-slate-500'
                   }`}>
                     {item.count}
                   </span>
@@ -160,27 +157,27 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
 
         {/* Sidebar Footer: Public site & Logout */}
-        <div className="pt-4 border-t border-slate-800/80 space-y-2">
+        <div className="pt-3 border-t border-[#3781fc]/20 space-y-1.5">
           <button
             onClick={onViewPublicSite}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-slate-400 hover:text-cyan-400 hover:bg-slate-850 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs text-[#cbe9fd] hover:text-white bg-[#08173d]/40 hover:bg-[#0f2862]/60 border border-[#3781fc]/25 transition-all cursor-pointer font-medium"
           >
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className="w-3.5 h-3.5" />
             <span>View Public Website</span>
           </button>
 
           <button
             onClick={onLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-950/30 transition-colors cursor-pointer"
+            className="w-full flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs text-rose-300 hover:text-rose-100 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/40 transition-all cursor-pointer font-semibold"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5 text-rose-400" />
             <span>Sign Out Admin</span>
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 sm:p-8 lg:p-10 max-w-7xl overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-7 max-w-7xl overflow-y-auto">
         {activeTab === 'dashboard' && (
           <DashboardHome
             stats={stats}

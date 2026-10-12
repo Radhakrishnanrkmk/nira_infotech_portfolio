@@ -106,33 +106,33 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 rounded-xl shadow-lg shadow-cyan-950/40 transition-all cursor-pointer self-start sm:self-auto"
+          className="flex items-center gap-2 px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-[#1951fc] to-[#3781fc] hover:from-[#2563eb] hover:to-[#60a5fa] disabled:opacity-50 rounded-xl border border-[#cbe9fd]/40 shadow-[0_0_20px_rgba(25,81,252,0.45)] transition-all cursor-pointer self-start sm:self-auto"
         >
           {saving ? 'Saving Everything...' : 'Save All Changes'}
         </button>
       </div>
 
       {savedSuccess && (
-        <div className="p-4 rounded-xl bg-emerald-950/70 border border-emerald-700 text-emerald-200 text-xs flex items-center gap-2.5 animate-in fade-in">
+        <div className="p-4 rounded-xl bg-emerald-950/70 border border-emerald-600/60 text-emerald-200 text-xs flex items-center gap-2.5 animate-in fade-in shadow-[0_0_15px_rgba(16,185,129,0.3)]">
           <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
           <span className="font-medium">All settings and details saved successfully! The live public website has been updated.</span>
         </div>
       )}
 
       {/* 1. Brand Identity & Logo */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-5">
-        <div className="flex items-center gap-2 text-cyan-400">
-          <Sparkles className="w-4 h-4" />
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">1. Brand Identity & Logo</h3>
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-5">
+        <div className="flex items-center gap-2 text-[#cbe9fd]">
+          <Sparkles className="w-4 h-4 text-[#3781fc]" />
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">1. Brand Identity & Logo</h3>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-6 pb-4 border-b border-slate-800">
-          <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-6 pb-4 border-b border-[#3781fc]/20">
+          <div className="p-3.5 rounded-2xl bg-[#03091e]/90 border border-[#3781fc]/30 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(25,81,252,0.2)]">
             <NiraLogo size="lg" customLogoUrl={formData.logo_url} />
           </div>
 
           <div className="flex-1 space-y-2.5 w-full">
-            <label className="block text-xs font-mono text-slate-400">
+            <label className="block text-xs font-mono text-[#cbe9fd]">
               Custom Logo Image URL (or upload below)
             </label>
             <input
@@ -140,11 +140,11 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               placeholder="https://... custom logo URL"
               value={formData.logo_url || ''}
               onChange={(e) => setFormData({ ...formData, logo_url: e.target.value })}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full px-3.5 py-2 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-xs text-slate-100 focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
             <div className="flex flex-wrap items-center gap-3">
-              <label className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs cursor-pointer transition-colors border border-slate-700">
-                <Upload className="w-3.5 h-3.5 text-cyan-400" />
+              <label className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#08173d]/70 hover:bg-[#0f2862] text-[#cbe9fd] text-xs cursor-pointer transition-colors border border-[#3781fc]/35 shadow-sm">
+                <Upload className="w-3.5 h-3.5 text-[#3781fc]" />
                 <span>{uploadingLogo ? 'Uploading Logo...' : 'Upload Brand Logo File'}</span>
                 <input
                   type="file"
@@ -168,7 +168,7 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
         </div>
 
         <div>
-          <label className="block text-xs font-mono text-slate-400 mb-1.5">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
             Business / Brand Name *
           </label>
           <input
@@ -176,16 +176,16 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             required
             value={formData.business_name}
             onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
           />
         </div>
       </div>
 
       {/* 2. Contact Details & Direct WhatsApp */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
         <div className="flex items-center gap-2 text-emerald-400">
           <Phone className="w-4 h-4" />
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">2. Contact Numbers & Direct WhatsApp</h3>
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">2. Contact Numbers & Direct WhatsApp</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -198,12 +198,12 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               required
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Phone Number (For calls & display) *
             </label>
             <input
@@ -211,12 +211,12 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               required
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Email Address *
             </label>
             <input
@@ -224,12 +224,12 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Office / Service Location *
             </label>
             <input
@@ -237,7 +237,7 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               required
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
         </div>
@@ -257,14 +257,14 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
       </div>
 
       {/* 3. Hero Section Copy */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
-        <div className="flex items-center gap-2 text-sky-400">
-          <FileText className="w-4 h-4" />
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">3. Hero Section Copy</h3>
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
+        <div className="flex items-center gap-2 text-[#cbe9fd]">
+          <FileText className="w-4 h-4 text-[#3781fc]" />
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">3. Hero Section Copy</h3>
         </div>
 
         <div>
-          <label className="block text-xs font-mono text-slate-400 mb-1.5">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
             Hero Top Badge / Kicker Text
           </label>
           <input
@@ -272,12 +272,12 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             value={formData.hero_kicker || ''}
             onChange={(e) => setFormData({ ...formData, hero_kicker: e.target.value })}
             placeholder="Full Stack Web Development & IT Solutions"
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-mono text-slate-400 mb-1.5">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
             Hero Heading Tagline *
           </label>
           <input
@@ -285,12 +285,12 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             required
             value={formData.hero_title}
             onChange={(e) => setFormData({ ...formData, hero_title: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-mono text-slate-400 mb-1.5">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
             Hero Short Description *
           </label>
           <textarea
@@ -298,20 +298,20 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             required
             value={formData.hero_description}
             onChange={(e) => setFormData({ ...formData, hero_description: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500 resize-none"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc] resize-none"
           />
         </div>
       </div>
 
       {/* 4. About, Mission & Vision */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
-        <div className="flex items-center gap-2 text-fuchsia-400">
-          <Globe className="w-4 h-4" />
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">4. About, Mission & Vision</h3>
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
+        <div className="flex items-center gap-2 text-[#cbe9fd]">
+          <Globe className="w-4 h-4 text-[#3781fc]" />
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">4. About, Mission & Vision</h3>
         </div>
 
         <div>
-          <label className="block text-xs font-mono text-slate-400 mb-1.5">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
             About Company Story / Overview *
           </label>
           <textarea
@@ -319,13 +319,13 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             required
             value={formData.about}
             onChange={(e) => setFormData({ ...formData, about: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500 resize-none"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc] resize-none"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Mission Statement *
             </label>
             <textarea
@@ -333,12 +333,12 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               required
               value={formData.mission}
               onChange={(e) => setFormData({ ...formData, mission: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500 resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc] resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Vision Statement *
             </label>
             <textarea
@@ -346,88 +346,88 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
               required
               value={formData.vision}
               onChange={(e) => setFormData({ ...formData, vision: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500 resize-none"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc] resize-none"
             />
           </div>
         </div>
       </div>
 
       {/* 5. Social Media Links */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
-        <div className="flex items-center gap-2 text-cyan-400">
-          <Share2 className="w-4 h-4" />
-          <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">5. Social Media & Developer Profiles</h3>
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
+        <div className="flex items-center gap-2 text-[#cbe9fd]">
+          <Share2 className="w-4 h-4 text-[#3781fc]" />
+          <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">5. Social Media & Developer Profiles</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               GitHub Profile / Org URL
             </label>
             <input
               type="url"
               value={formData.github}
               onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               LinkedIn Profile / Company URL
             </label>
             <input
               type="url"
               value={formData.linkedin}
               onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Instagram Profile URL
             </label>
             <input
               type="url"
               value={formData.instagram}
               onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Facebook Page URL
             </label>
             <input
               type="url"
               value={formData.facebook || ''}
               onChange={(e) => setFormData({ ...formData, facebook: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-xs font-mono text-slate-400 mb-1.5">
+            <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
               Twitter / X Profile URL
             </label>
             <input
               type="url"
               value={formData.twitter || ''}
               onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
             />
           </div>
         </div>
       </div>
 
       {/* 6. Footer & Copyright Text */}
-      <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-4">
-        <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider font-mono">6. Footer & Copyright Text</h3>
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.35)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
+        <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">6. Footer & Copyright Text</h3>
 
         <div>
-          <label className="block text-xs font-mono text-slate-400 mb-1.5">
+          <label className="block text-xs font-mono text-[#cbe9fd] mb-1.5">
             Footer Copyright Line / Text
           </label>
           <input
@@ -435,23 +435,23 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             required
             value={formData.footer_text}
             onChange={(e) => setFormData({ ...formData, footer_text: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-950/70 border border-slate-800 text-slate-100 text-sm focus:outline-none focus:border-cyan-500"
+            className="w-full px-4 py-2.5 rounded-xl bg-[#03091e]/85 border border-[#3781fc]/30 text-white text-sm focus:outline-none focus:border-[#3781fc] focus:ring-1 focus:ring-[#3781fc]"
           />
         </div>
       </div>
 
       {/* 7. Supabase Database Connection & Schema Exporter */}
-      <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-[#0a1526] to-slate-900 border border-cyan-900/50 space-y-4">
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#08173d]/65 via-[#040d24]/75 to-[#08173d]/65 border border-[#3781fc]/30 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.4)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.2)] space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Database className="w-5 h-5 text-cyan-400" />
-            <h3 className="text-sm font-bold text-slate-100 font-mono">Supabase PostgreSQL Connection</h3>
+            <Database className="w-5 h-5 text-[#3781fc]" />
+            <h3 className="text-sm font-bold text-white font-mono">Supabase PostgreSQL Connection</h3>
           </div>
 
           <button
             type="button"
             onClick={handleCopySchema}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950 border border-cyan-700/60 text-cyan-300 hover:text-white text-xs font-mono transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0b2cb1]/40 border border-[#3781fc]/40 text-[#cbe9fd] hover:text-white text-xs font-mono transition-colors cursor-pointer shadow-sm"
           >
             <Copy className="w-3.5 h-3.5" />
             <span>{copiedSchema ? 'SQL Copied!' : 'Copy SQL Schema'}</span>
@@ -462,7 +462,7 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
           The app connects seamlessly with your Supabase database when environment variables are supplied:
         </p>
 
-        <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-[11px] text-cyan-300 space-y-1">
+        <div className="p-3.5 rounded-xl bg-[#03091e]/90 border border-[#3781fc]/30 font-mono text-[11px] text-[#cbe9fd] space-y-1">
           <p>SUPABASE_URL="https://your-project.supabase.co"</p>
           <p>SUPABASE_ANON_KEY="your-anon-public-key"</p>
           <p>SUPABASE_SERVICE_ROLE_KEY="your-service-role-key" (Optional)</p>
@@ -473,7 +473,7 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
             <button
               type="button"
               onClick={() => onNavigate('database')}
-              className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-emerald-300 bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-800/80 rounded-xl transition-all cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2.5 text-xs font-semibold text-emerald-300 bg-emerald-950/70 hover:bg-emerald-900/70 border border-emerald-500/40 rounded-xl transition-all cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.25)]"
             >
               <Database className="w-3.5 h-3.5 text-emerald-400" />
               <span>Paste Supabase Keys & Connect Database Live →</span>
@@ -487,7 +487,7 @@ export const SettingsManager: React.FC<SettingsManagerProps> = ({ settings, onRe
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 px-8 py-3 text-sm font-bold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:opacity-50 rounded-xl shadow-xl shadow-cyan-950/50 transition-all cursor-pointer"
+          className="flex items-center gap-2 px-8 py-3 text-sm font-bold text-white bg-gradient-to-r from-[#1951fc] to-[#3781fc] hover:from-[#2563eb] hover:to-[#60a5fa] disabled:opacity-50 rounded-xl border border-[#cbe9fd]/40 shadow-[0_0_25px_rgba(25,81,252,0.5)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.6)] backdrop-blur-md transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
         >
           {saving ? 'Saving Everything...' : 'Save All Changes'}
         </button>

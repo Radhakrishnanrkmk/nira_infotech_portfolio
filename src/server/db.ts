@@ -44,48 +44,76 @@ export let supabase: SupabaseClient | null = null;
 export let isSupabaseConfigured = false;
 let currentConfig: SupabaseConfigData | null = null;
 
-// Initialize Supabase from storage or env
-function initializeClient() {
+import dns from 'dns';
+
+// Verify that the host is resolvable in DNS before attempting network requests
+export async function isHostResolvable(urlStr: string): Promise<boolean> {
+  try {
+    const parsed = new URL(urlStr);
+    if (!parsed.hostname) return false;
+    await dns.promises.lookup(parsed.hostname);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+// Initialize Supabase from storage or env (with validation)
+async function initializeClient() {
   // 1. First check persisted dashboard config
   if (fs.existsSync(SUPABASE_CONFIG_FILE)) {
     try {
       const saved = JSON.parse(fs.readFileSync(SUPABASE_CONFIG_FILE, 'utf-8'));
       if (saved && saved.url && (saved.serviceRoleKey || saved.anonKey)) {
-        const key = saved.serviceRoleKey || saved.anonKey;
-        supabase = createClient(saved.url, key);
-        isSupabaseConfigured = true;
-        currentConfig = { ...saved, source: 'dashboard' };
-        console.log(`[Database] Connected to Supabase via saved config: ${saved.url}`);
-        return;
+        const resolvable = await isHostResolvable(saved.url);
+        if (resolvable) {
+          const key = saved.serviceRoleKey || saved.anonKey;
+          supabase = createClient(saved.url, key);
+          isSupabaseConfigured = true;
+          currentConfig = { ...saved, source: 'dashboard' };
+          console.log(`[Database] Connected to Supabase via saved config: ${saved.url}`);
+          return;
+        } else {
+          console.warn(`[Database] Saved Supabase host ${saved.url} is unreachable. Falling back to local database.`);
+        }
       }
     } catch (e) {
       console.error('[Database] Failed to read supabase-config.json:', e);
     }
   }
 
-  // 2. Fall back to process.env
+  // 2. Fall back to process.env if valid and resolvable
   const envUrl = process.env.SUPABASE_URL || '';
   const envKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
 
-  if (envUrl && envKey) {
-    supabase = createClient(envUrl, envKey);
-    isSupabaseConfigured = true;
-    currentConfig = {
-      url: envUrl,
-      anonKey: process.env.SUPABASE_ANON_KEY || '',
-      serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-      source: 'env'
-    };
-    console.log(`[Database] Connected to Supabase via environment variables: ${envUrl}`);
-  } else {
-    supabase = null;
-    isSupabaseConfigured = false;
-    currentConfig = null;
-    console.log('[Database] Supabase not configured. Using local JSON database.');
+  if (envUrl && envKey && !envUrl.includes('your-project-id')) {
+    const resolvable = await isHostResolvable(envUrl);
+    if (resolvable) {
+      supabase = createClient(envUrl, envKey);
+      isSupabaseConfigured = true;
+      currentConfig = {
+        url: envUrl,
+        anonKey: process.env.SUPABASE_ANON_KEY || '',
+        serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+        source: 'env'
+      };
+      console.log(`[Database] Connected to Supabase via environment variables: ${envUrl}`);
+      return;
+    } else {
+      console.warn(`[Database] Configured SUPABASE_URL (${envUrl}) is not resolvable. Using reliable local JSON database.`);
+    }
   }
+
+  supabase = null;
+  isSupabaseConfigured = false;
+  currentConfig = null;
+  console.log('[Database] Supabase not active. Operating with high-performance local JSON storage.');
 }
 
-initializeClient();
+// Initial client check
+initializeClient().catch((err) => {
+  console.error('[Database] Error during initial client configuration:', err);
+});
 
 /**
  * Test a Supabase connection with given credentials
@@ -97,16 +125,29 @@ export async function testSupabaseCredentials(url: string, key: string): Promise
   missingTables?: string[];
 }> {
   try {
-    const testClient = createClient(url, key);
+    const cleanUrl = url.trim().replace(/\/+$/, '');
+    const isResolvable = await isHostResolvable(cleanUrl);
+    if (!isResolvable) {
+      return {
+        success: false,
+        message: `Cannot reach Supabase host (${new URL(cleanUrl).hostname}). Please check the URL or project status in Supabase.`
+      };
+    }
+
+    const testClient = createClient(cleanUrl, key);
     const tables = ['site_settings', 'projects', 'services', 'skills', 'inquiries'];
     const tablesFound: string[] = [];
     const missingTables: string[] = [];
 
     for (const table of tables) {
-      const { error } = await testClient.from(table).select('count', { count: 'exact', head: true });
-      if (!error) {
-        tablesFound.push(table);
-      } else {
+      try {
+        const { error } = await testClient.from(table).select('count', { count: 'exact', head: true });
+        if (!error) {
+          tablesFound.push(table);
+        } else {
+          missingTables.push(table);
+        }
+      } catch {
         missingTables.push(table);
       }
     }
@@ -176,7 +217,7 @@ export async function connectSupabase(url: string, anonKey: string, serviceRoleK
 /**
  * Disconnect Supabase and revert to local database
  */
-export function disconnectSupabase(): { success: boolean; message: string } {
+export async function disconnectSupabase(): Promise<{ success: boolean; message: string }> {
   try {
     if (fs.existsSync(SUPABASE_CONFIG_FILE)) {
       fs.unlinkSync(SUPABASE_CONFIG_FILE);
@@ -185,19 +226,10 @@ export function disconnectSupabase(): { success: boolean; message: string } {
     console.error('Error removing supabase config file:', e);
   }
 
-  // Re-check env or revert to local
-  const envUrl = process.env.SUPABASE_URL || '';
-  const envKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '';
-
-  if (envUrl && envKey) {
-    supabase = createClient(envUrl, envKey);
-    isSupabaseConfigured = true;
-    currentConfig = { url: envUrl, anonKey: '', serviceRoleKey: envKey, source: 'env' };
-  } else {
-    supabase = null;
-    isSupabaseConfigured = false;
-    currentConfig = null;
-  }
+  // Explicitly reset in-memory client
+  supabase = null;
+  isSupabaseConfigured = false;
+  currentConfig = null;
 
   return {
     success: true,

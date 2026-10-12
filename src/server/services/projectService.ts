@@ -180,10 +180,10 @@ export async function deleteProject(id: string): Promise<boolean> {
       if (!error) {
         deletedFromSupabase = true;
       } else {
-        console.error('Supabase project delete failed:', error.message);
+        console.warn('Supabase project delete notice:', error.message);
       }
-    } catch (e) {
-      console.error('Supabase delete failed:', e);
+    } catch (e: any) {
+      console.warn('Supabase project delete exception, falling back to local:', e?.message || e);
     }
   }
 

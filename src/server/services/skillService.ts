@@ -151,10 +151,10 @@ export async function deleteSkill(id: string): Promise<boolean> {
       if (!error) {
         deletedFromSupabase = true;
       } else {
-        console.error('Supabase skill delete failed:', error.message);
+        console.warn('Supabase skill delete notice:', error.message);
       }
-    } catch (e) {
-      console.error('Supabase delete failed:', e);
+    } catch (e: any) {
+      console.warn('Supabase skill delete exception, falling back to local:', e?.message || e);
     }
   }
 

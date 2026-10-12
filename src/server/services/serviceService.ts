@@ -153,10 +153,10 @@ export async function deleteService(id: string): Promise<boolean> {
       if (!error) {
         deletedFromSupabase = true;
       } else {
-        console.error('Supabase service delete failed:', error.message);
+        console.warn('Supabase service delete notice:', error.message);
       }
-    } catch (e) {
-      console.error('Supabase delete failed:', e);
+    } catch (e: any) {
+      console.warn('Supabase service delete exception, falling back to local:', e?.message || e);
     }
   }
 

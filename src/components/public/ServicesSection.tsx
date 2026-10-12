@@ -19,15 +19,15 @@ interface ServicesSectionProps {
 
 const renderServiceIcon = (iconName: string) => {
   const map: Record<string, React.ReactNode> = {
-    Globe: <Globe className="w-6 h-6" />,
-    Briefcase: <Briefcase className="w-6 h-6" />,
-    Building2: <Building2 className="w-6 h-6" />,
-    Zap: <Zap className="w-6 h-6" />,
-    Layers: <Layers className="w-6 h-6" />,
-    Wrench: <Wrench className="w-6 h-6" />,
-    Code: <Code className="w-6 h-6" />
+    Globe: <Globe className="w-5 h-5" />,
+    Briefcase: <Briefcase className="w-5 h-5" />,
+    Building2: <Building2 className="w-5 h-5" />,
+    Zap: <Zap className="w-5 h-5" />,
+    Layers: <Layers className="w-5 h-5" />,
+    Wrench: <Wrench className="w-5 h-5" />,
+    Code: <Code className="w-5 h-5" />
   };
-  return map[iconName] || <Code className="w-6 h-6" />;
+  return map[iconName] || <Code className="w-5 h-5" />;
 };
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
@@ -37,58 +37,60 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   const activeServices = services.filter(s => s.active);
 
   return (
-    <section id="services" className="py-20 md:py-28 border-t border-slate-800/80 bg-[#090d16] relative">
+    <section id="services" className="py-12 md:py-16 border-t border-[#3781fc]/20 bg-[#020614] relative">
+      {/* Background glow */}
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[350px] bg-gradient-to-tr from-[#03195b]/30 via-[#1951fc]/20 to-[#3781fc]/15 rounded-full blur-[110px] pointer-events-none -z-10" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <p className="text-xs font-mono text-cyan-400 font-semibold tracking-wider uppercase mb-2">
+        <div className="text-center max-w-2xl mx-auto mb-8">
+          <p className="text-xs font-bold text-[#cbe9fd] tracking-wider uppercase mb-1.5 drop-shadow-[0_0_10px_rgba(55,129,252,0.6)]">
             What We Deliver
           </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_15px_rgba(25,81,252,0.3)]">
             Our Services & Solutions
           </h2>
-          <p className="mt-3 text-base text-slate-400">
+          <p className="mt-2 text-sm sm:text-base text-slate-300">
             End-to-end web engineering crafted with clean code, modern designs, and hassle-free content management.
           </p>
         </div>
 
         {/* Services 3-column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {activeServices.map((service, index) => (
             <div
               key={service.id}
-              className="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-900/90 transition-all flex flex-col justify-between group"
+              className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#08173d]/55 to-[#040d24]/65 border border-[#3781fc]/25 backdrop-blur-xl shadow-[0_8px_30px_rgba(3,25,91,0.4)] shadow-[inset_0_1px_1px_rgba(203,233,253,0.25)] hover:border-[#3781fc]/60 hover:shadow-[0_12px_40px_rgba(25,81,252,0.35)] transition-all flex flex-col justify-between group"
             >
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-slate-950 border border-slate-800 text-cyan-400 flex items-center justify-center group-hover:text-cyan-300 group-hover:border-cyan-500/40 transition-colors">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0b2cb1]/60 to-[#1951fc]/40 border border-[#cbe9fd]/35 text-[#cbe9fd] flex items-center justify-center shadow-[0_0_15px_rgba(25,81,252,0.35)] transition-transform group-hover:scale-110">
                     {renderServiceIcon(service.icon)}
                   </div>
-                  {/* Human editorial index per Section 1B (no //) */}
-                  <span className="text-xs font-mono text-slate-600">
+                  <span className="text-xs font-mono text-slate-400 font-semibold">
                     0{index + 1}.
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-100 mb-3 group-hover:text-cyan-300 transition-colors">
+                <h3 className="text-base sm:text-lg font-bold text-white mb-2 group-hover:text-[#cbe9fd] transition-colors">
                   {service.title}
                 </h3>
 
-                <p className="text-sm text-slate-400 leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
                   {service.description}
                 </p>
               </div>
 
-              <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between">
+              <div className="pt-4 border-t border-[#3781fc]/20 flex items-center justify-between">
                 <button
                   onClick={() => onSelectService(service.title)}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs font-bold text-[#cbe9fd] hover:text-white transition-colors cursor-pointer"
                 >
                   <span>Request Quote</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </button>
-                <span className="text-[11px] text-emerald-400 font-mono flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3" />
+                <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                  <CheckCircle className="w-3.5 h-3.5" />
                   <span>Available</span>
                 </span>
               </div>

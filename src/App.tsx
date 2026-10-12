@@ -130,7 +130,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#020614] text-slate-100 flex flex-col font-sans relative selection:bg-[#1951fc] selection:text-white">
+      {/* Universal Ambient Glassmorphic Mesh & Glow Orbs */}
+      <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute -top-[10%] left-[15%] w-[750px] h-[550px] bg-gradient-to-tr from-[#03195b]/45 via-[#0b2cb1]/35 to-[#1951fc]/25 rounded-full blur-[140px]" />
+        <div className="absolute top-[40%] -right-[5%] w-[650px] h-[600px] bg-gradient-to-bl from-[#1951fc]/25 via-[#3781fc]/20 to-[#03195b]/35 rounded-full blur-[130px]" />
+        <div className="absolute bottom-[5%] left-[5%] w-[600px] h-[500px] bg-[#0b2cb1]/30 rounded-full blur-[130px]" />
+      </div>
+
       {view === 'public' ? (
         <>
           <Navbar
