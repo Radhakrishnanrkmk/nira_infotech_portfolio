@@ -5,25 +5,41 @@ import { initialServices } from '../../data/initialData.ts';
 const isUuid = (id?: string): boolean =>
   Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
 
+const QUERY_TIMEOUT_MS = 3500;
+
+async function runWithTimeout<T>(promise: PromiseLike<T>, fallback: T): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), QUERY_TIMEOUT_MS);
+  });
+  return Promise.race([
+    Promise.resolve(promise).finally(() => clearTimeout(timer)),
+    timeoutPromise
+  ]);
+}
+
 export async function getAllServices(): Promise<Service[]> {
   const db = readLocalDb();
 
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('display_order', { ascending: true });
+      const res = await runWithTimeout(
+        supabase
+          .from('services')
+          .select('*')
+          .order('display_order', { ascending: true }),
+        { data: null, error: { message: 'timeout' } } as any
+      );
+
+      const { data, error } = res;
 
       if (!error && Array.isArray(data)) {
         if (data.length > 0) {
           return data as Service[];
         }
 
-        // If Supabase table is empty, auto-seed with initial services
+        // Auto-seed initial services if Supabase table is empty
         const seedServices = db.services && db.services.length > 0 ? db.services : initialServices;
-        console.log(`[Supabase] Services table empty. Auto-seeding ${seedServices.length} initial services...`);
-
         const rowsToInsert = seedServices.map(({ id, ...rest }) => ({
           ...rest,
           ...(isUuid(id) ? { id } : {})
@@ -37,11 +53,9 @@ export async function getAllServices(): Promise<Service[]> {
         if (!seedErr && seeded && seeded.length > 0) {
           return seeded as Service[];
         }
-      } else if (error) {
-        console.warn('Supabase services query warning, using local db:', error.message);
       }
-    } catch (e) {
-      console.error('Supabase services query failed, falling back:', e);
+    } catch {
+      // Graceful local fallback
     }
   }
 
@@ -67,23 +81,25 @@ export async function createService(serviceData: Partial<Service>): Promise<Serv
 
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .insert([payload])
-        .select()
-        .single();
+      const res = await runWithTimeout(
+        supabase
+          .from('services')
+          .insert([payload])
+          .select()
+          .single(),
+        { data: null, error: { message: 'timeout' } } as any
+      );
 
-      if (!error && data) {
-        const created = data as Service;
+      if (!res.error && res.data) {
+        const created = res.data as Service;
         const db = readLocalDb();
         db.services = db.services || [];
         db.services.push(created);
         saveLocalDb(db);
         return created;
       }
-      console.error('Supabase service insert failed:', error?.message);
-    } catch (e) {
-      console.error('Supabase service insert exception:', e);
+    } catch {
+      // Graceful fallback
     }
   }
 
@@ -103,17 +119,20 @@ export async function updateService(id: string, updates: Partial<Service>): Prom
   const sanitizedUpdates = { ...updates, updated_at: updatedAt };
   delete (sanitizedUpdates as any).id;
 
-  if (isSupabaseConfigured && supabase) {
+  if (isSupabaseConfigured && supabase && isUuid(id)) {
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .update(sanitizedUpdates)
-        .eq('id', id)
-        .select()
-        .single();
+      const res = await runWithTimeout(
+        supabase
+          .from('services')
+          .update(sanitizedUpdates)
+          .eq('id', id)
+          .select()
+          .single(),
+        { data: null, error: { message: 'timeout' } } as any
+      );
 
-      if (!error && data) {
-        const updated = data as Service;
+      if (!res.error && res.data) {
+        const updated = res.data as Service;
         const db = readLocalDb();
         const index = db.services.findIndex(s => s.id === id);
         if (index !== -1) {
@@ -122,9 +141,8 @@ export async function updateService(id: string, updates: Partial<Service>): Prom
         }
         return updated;
       }
-      console.error('Supabase service update failed:', error?.message);
-    } catch (e) {
-      console.error('Supabase service update failed:', e);
+    } catch {
+      // Graceful fallback
     }
   }
 
@@ -142,25 +160,39 @@ export async function updateService(id: string, updates: Partial<Service>): Prom
 
 export async function deleteService(id: string): Promise<boolean> {
   let deletedFromSupabase = false;
+  const db = readLocalDb();
+  const existingService = db.services.find(s => s.id === id);
 
   if (isSupabaseConfigured && supabase) {
     try {
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id);
-
-      if (!error) {
-        deletedFromSupabase = true;
-      } else {
-        console.warn('Supabase service delete notice:', error.message);
+      if (isUuid(id)) {
+        const res = await runWithTimeout(
+          supabase
+            .from('services')
+            .delete()
+            .eq('id', id),
+          { error: { message: 'timeout' } } as any
+        );
+        if (!res.error) {
+          deletedFromSupabase = true;
+        }
+      } else if (existingService?.title) {
+        const res = await runWithTimeout(
+          supabase
+            .from('services')
+            .delete()
+            .eq('title', existingService.title),
+          { error: { message: 'timeout' } } as any
+        );
+        if (!res.error) {
+          deletedFromSupabase = true;
+        }
       }
-    } catch (e: any) {
-      console.warn('Supabase service delete exception, falling back to local:', e?.message || e);
+    } catch {
+      // Local fallback
     }
   }
 
-  const db = readLocalDb();
   const initialLength = db.services.length;
   db.services = db.services.filter(s => s.id !== id);
   saveLocalDb(db);

@@ -2,17 +2,33 @@ import { supabase, isSupabaseConfigured, readLocalDb, saveLocalDb } from '../db.
 import { SiteSettings } from '../../types/index.ts';
 import { initialSiteSettings } from '../../data/initialData.ts';
 
+const QUERY_TIMEOUT_MS = 3500;
+
+async function runWithTimeout<T>(promise: PromiseLike<T>, fallback: T): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), QUERY_TIMEOUT_MS);
+  });
+  return Promise.race([
+    Promise.resolve(promise).finally(() => clearTimeout(timer)),
+    timeoutPromise
+  ]);
+}
+
 export async function getSettings(): Promise<SiteSettings> {
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*')
-        .eq('id', 'default')
-        .single();
-      if (!error && data) return data as SiteSettings;
-    } catch (e) {
-      console.error('Supabase settings query failed:', e);
+      const res = await runWithTimeout(
+        supabase
+          .from('site_settings')
+          .select('*')
+          .eq('id', 'default')
+          .single(),
+        { data: null, error: { message: 'timeout' } } as any
+      );
+      if (!res.error && res.data) return res.data as SiteSettings;
+    } catch {
+      // Graceful fallback
     }
   }
 
@@ -25,14 +41,17 @@ export async function updateSettings(updates: Partial<SiteSettings>): Promise<Si
 
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .upsert({ ...updates, id: 'default', updated_at: updatedAt })
-        .select()
-        .single();
-      if (!error && data) return data as SiteSettings;
-    } catch (e) {
-      console.error('Supabase settings update failed:', e);
+      const res = await runWithTimeout(
+        supabase
+          .from('site_settings')
+          .upsert({ ...updates, id: 'default', updated_at: updatedAt })
+          .select()
+          .single(),
+        { data: null, error: { message: 'timeout' } } as any
+      );
+      if (!res.error && res.data) return res.data as SiteSettings;
+    } catch {
+      // Graceful fallback
     }
   }
 

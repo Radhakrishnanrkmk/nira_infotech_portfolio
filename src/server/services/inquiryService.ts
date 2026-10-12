@@ -1,16 +1,35 @@
 import { supabase, isSupabaseConfigured, readLocalDb, saveLocalDb } from '../db.ts';
 import { Inquiry } from '../../types/index.ts';
 
+const QUERY_TIMEOUT_MS = 3500;
+
+async function runWithTimeout<T>(promise: PromiseLike<T>, fallback: T): Promise<T> {
+  let timer: NodeJS.Timeout;
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), QUERY_TIMEOUT_MS);
+  });
+  return Promise.race([
+    Promise.resolve(promise).finally(() => clearTimeout(timer)),
+    timeoutPromise
+  ]);
+}
+
+const isUuid = (id?: string): boolean =>
+  Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
+
 export async function getAllInquiries(): Promise<Inquiry[]> {
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data, error } = await supabase
-        .from('inquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (!error && data) return data as Inquiry[];
-    } catch (e) {
-      console.error('Supabase inquiries query failed:', e);
+      const res = await runWithTimeout(
+        supabase
+          .from('inquiries')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        { data: null, error: { message: 'timeout' } } as any
+      );
+      if (!res.error && res.data) return res.data as Inquiry[];
+    } catch {
+      // Graceful fallback
     }
   }
 
@@ -19,9 +38,6 @@ export async function getAllInquiries(): Promise<Inquiry[]> {
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
 }
-
-const isUuid = (id?: string): boolean =>
-  Boolean(id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id));
 
 export async function createInquiry(data: Partial<Inquiry>): Promise<Inquiry> {
   const payload: any = {
@@ -44,18 +60,21 @@ export async function createInquiry(data: Partial<Inquiry>): Promise<Inquiry> {
   // 1. Save to Supabase if configured
   if (isSupabaseConfigured && supabase) {
     try {
-      const { data: saved, error } = await supabase
-        .from('inquiries')
-        .insert([payload])
-        .select()
-        .single();
-      if (!error && saved) {
-        dispatchEmailNotification(saved as Inquiry);
-        return saved as Inquiry;
+      const res = await runWithTimeout(
+        supabase
+          .from('inquiries')
+          .insert([payload])
+          .select()
+          .single(),
+        { data: null, error: { message: 'timeout' } } as any
+      );
+      if (!res.error && res.data) {
+        const saved = res.data as Inquiry;
+        dispatchEmailNotification(saved);
+        return saved;
       }
-      console.error('Supabase inquiry insert failed:', error?.message);
-    } catch (e) {
-      console.error('Supabase inquiry insert exception:', e);
+    } catch {
+      // Fallback to local
     }
   }
 
@@ -79,17 +98,20 @@ export async function updateInquiryStatus(
   id: string,
   status: Inquiry['status']
 ): Promise<Inquiry | null> {
-  if (isSupabaseConfigured && supabase) {
+  if (isSupabaseConfigured && supabase && isUuid(id)) {
     try {
-      const { data, error } = await supabase
-        .from('inquiries')
-        .update({ status })
-        .eq('id', id)
-        .select()
-        .single();
-      if (!error && data) return data as Inquiry;
-    } catch (e) {
-      console.error('Supabase inquiry update failed:', e);
+      const res = await runWithTimeout(
+        supabase
+          .from('inquiries')
+          .update({ status })
+          .eq('id', id)
+          .select()
+          .single(),
+        { data: null, error: { message: 'timeout' } } as any
+      );
+      if (!res.error && res.data) return res.data as Inquiry;
+    } catch {
+      // Graceful fallback
     }
   }
 
@@ -103,15 +125,18 @@ export async function updateInquiryStatus(
 }
 
 export async function deleteInquiry(id: string): Promise<boolean> {
-  if (isSupabaseConfigured && supabase) {
+  if (isSupabaseConfigured && supabase && isUuid(id)) {
     try {
-      const { error } = await supabase
-        .from('inquiries')
-        .delete()
-        .eq('id', id);
-      if (!error) return true;
-    } catch (e) {
-      console.error('Supabase inquiry delete failed:', e);
+      const res = await runWithTimeout(
+        supabase
+          .from('inquiries')
+          .delete()
+          .eq('id', id),
+        { error: { message: 'timeout' } } as any
+      );
+      if (!res.error) return true;
+    } catch {
+      // Graceful fallback
     }
   }
 
@@ -123,6 +148,5 @@ export async function deleteInquiry(id: string): Promise<boolean> {
 }
 
 function dispatchEmailNotification(inquiry: Inquiry) {
-  // Safe backend email notification logging / integration hook
   console.log(`[EMAIL NOTIFICATION] New client inquiry received from ${inquiry.name} <${inquiry.email}> for ${inquiry.service}. Budget: ${inquiry.budget}`);
 }

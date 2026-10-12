@@ -134,15 +134,25 @@ export async function testSupabaseCredentials(url: string, key: string): Promise
       };
     }
 
-    const testClient = createClient(cleanUrl, key);
+    const testClient = createClient(cleanUrl, key, { auth: { persistSession: false } });
     const tables = ['site_settings', 'projects', 'services', 'skills', 'inquiries'];
     const tablesFound: string[] = [];
     const missingTables: string[] = [];
 
     for (const table of tables) {
       try {
-        const { error } = await testClient.from(table).select('count', { count: 'exact', head: true });
-        if (!error) {
+        let timer: NodeJS.Timeout;
+        const queryPromise = testClient.from(table).select('count', { count: 'exact', head: true });
+        const timeoutPromise = new Promise<{ error: { message: string } }>((resolve) => {
+          timer = setTimeout(() => resolve({ error: { message: 'timeout' } }), 2500);
+        });
+
+        const res: any = await Promise.race([
+          Promise.resolve(queryPromise).finally(() => clearTimeout(timer!)),
+          timeoutPromise
+        ]);
+
+        if (!res.error) {
           tablesFound.push(table);
         } else {
           missingTables.push(table);
